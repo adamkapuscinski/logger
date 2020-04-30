@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -19,6 +17,10 @@ public class StatementResource {
     @GetMapping()
     public ResponseEntity<Page<StatementDTO>> getStatements(Pageable pageable) {
         return ResponseEntity.ok().body(statementService.findAll(pageable));
+    }
+    @PostMapping()
+    public ResponseEntity<StatementDTO> getStatements(@RequestBody String value) {
+        return ResponseEntity.ok().body(statementService.parseLogsAndSave(value));
     }
 
 }

@@ -23,4 +23,10 @@ public class StatementService {
     public Page<StatementDTO> findAll(Pageable pageable) {
         return statementRepository.findAll(pageable).map(statementMapper::toDto);
     }
+
+    public StatementDTO parseLogsAndSave(String value) {
+        StatementDTO statementDTO = new StatementDTO();
+        System.out.println(value);
+        return statementDTO;
+    }
 }
