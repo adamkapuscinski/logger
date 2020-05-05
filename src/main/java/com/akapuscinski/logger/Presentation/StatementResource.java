@@ -6,6 +6,7 @@ import com.akapuscinski.logger.domain.specification.StatementCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class StatementResource {
     @Autowired
     private StatementService statementService;
-    @GetMapping()
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Page<StatementDTO>> getStatements(Pageable pageable, StatementCriteria criteria) {
         return ResponseEntity.ok().body(statementService.findAll(criteria, pageable));
     }
