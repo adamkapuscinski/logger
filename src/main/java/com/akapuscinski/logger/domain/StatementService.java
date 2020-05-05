@@ -2,9 +2,14 @@ package com.akapuscinski.logger.domain;
 
 import com.akapuscinski.logger.domain.mapping.StatementMapper;
 import com.akapuscinski.logger.domain.mapping.StatementParser;
+import com.akapuscinski.logger.domain.models.Statement;
+import com.akapuscinski.logger.domain.models.Statement_;
 import com.akapuscinski.logger.domain.responseModels.StatementDTO;
+import com.akapuscinski.logger.domain.specification.StatementCriteria;
+import com.akapuscinski.logger.domain.specification.logic.QueryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class StatementService {
+public class StatementService extends QueryService<Statement> {
     private final StatementRepository statementRepository;
     private final StatementMapper statementMapper;
     private final StatementParser statementParser;
@@ -25,8 +30,31 @@ public class StatementService {
         this.statementParser = statementParser;
     }
 
-    public Page<StatementDTO> findAll(Pageable pageable) {
-        return statementRepository.findAll(pageable).map(statementMapper::toDto);
+    public Page<StatementDTO> findAll(StatementCriteria criteria, Pageable pageable) {
+        final Specification<Statement> specification = createSpecification(criteria);
+        return statementRepository.findAll(specification, pageable).map(statementMapper::toDto);
+    }
+
+    private Specification<Statement> createSpecification(StatementCriteria criteria) {
+        Specification<Statement> specification = Specification.where(null);
+        if (criteria != null) {
+            if (criteria.getId() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getId(), Statement_.id));
+            }
+            if (criteria.getCallingClass() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCallingClass(), Statement_.callingClass));
+            }
+            if (criteria.getData() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getData(), Statement_.data));
+            }
+            if (criteria.getLoggingLevel() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLoggingLevel(), Statement_.loggingLevel));
+            }
+            if (criteria.getEventDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getEventDate(), Statement_.eventDate));
+            }
+        }
+        return specification;
     }
 
     public List<StatementDTO> parseLogsAndSave(String value) {

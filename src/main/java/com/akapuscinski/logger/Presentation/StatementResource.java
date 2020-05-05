@@ -2,6 +2,7 @@ package com.akapuscinski.logger.Presentation;
 
 import com.akapuscinski.logger.domain.StatementService;
 import com.akapuscinski.logger.domain.responseModels.StatementDTO;
+import com.akapuscinski.logger.domain.specification.StatementCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +18,8 @@ public class StatementResource {
     @Autowired
     private StatementService statementService;
     @GetMapping()
-    public ResponseEntity<Page<StatementDTO>> getStatements(Pageable pageable) {
-        return ResponseEntity.ok().body(statementService.findAll(pageable));
+    public ResponseEntity<Page<StatementDTO>> getStatements(Pageable pageable, StatementCriteria criteria) {
+        return ResponseEntity.ok().body(statementService.findAll(criteria, pageable));
     }
 
     /**
