@@ -70,4 +70,7 @@ public class StatementService extends QueryService<Statement> {
         return statementRepository.saveAll(result.stream().map(statementMapper::toEntity).collect(Collectors.toList()))
                 .stream().map(statementMapper::toDto).collect(Collectors.toList());
     }
+    public StatementDTO save(Statement statement) {
+        return statementMapper.toDto(statementRepository.save(statement));
+    }
 }

@@ -3,7 +3,6 @@ package com.akapuscinski.logger.Presentation;
 import com.akapuscinski.logger.domain.StatementService;
 import com.akapuscinski.logger.domain.responseModels.StatementDTO;
 import com.akapuscinski.logger.domain.specification.StatementCriteria;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -16,8 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/logs")
 public class StatementResource {
-    @Autowired
-    private StatementService statementService;
+    private final StatementService statementService;
+
+    public StatementResource(StatementService statementService) {
+        this.statementService = statementService;
+    }
+
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Page<StatementDTO>> getStatements(Pageable pageable, StatementCriteria criteria) {
         return ResponseEntity.ok().body(statementService.findAll(criteria, pageable));

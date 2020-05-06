@@ -18,6 +18,7 @@ package com.akapuscinski.logger.domain.specification.logic;
  * limitations under the License.
  */
 
+import com.akapuscinski.logger.domain.models.Statement;
 import com.akapuscinski.logger.domain.specification.filters.RangeFilter;
 import com.akapuscinski.logger.domain.specification.filters.StringFilter;
 import org.springframework.data.jpa.domain.Specification;
